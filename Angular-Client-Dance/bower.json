@@ -1,0 +1,22 @@
+{
+  "name": "dantewithdeath",
+  "authors": [
+    "Jhonny Cordova <cordova.jhonny1993@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "assets/vendor/",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-ui-router": "0.3.1",
+    "angularjs-datepicker": "^2.1.21"
+  }
+}
