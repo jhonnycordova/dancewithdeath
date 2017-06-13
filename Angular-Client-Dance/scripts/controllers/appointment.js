@@ -16,6 +16,10 @@ angular.module('Client')
 
 				 $scope.typeError = 'success';
 				 $scope.mensaje = 'Appointment Deleted';
+				 $timeout(function() {
+					 $scope.typeError = '';
+					 $scope.mensaje = '';
+				 }, 2000);
 			 }, function (error) {
 				 $scope.typeError = 'danger';
 				 $scope.mensaje = 'Error';
@@ -31,6 +35,8 @@ angular.module('Client')
 		$scope.Appointment = {};
 		$scope.selectTime = false;
 		$scope.divTime = true;
+
+		$scope.mensaje = null;
 
 		$scope.putIdTime = function(id){
 			if(id == "9:00"){
@@ -76,14 +82,7 @@ angular.module('Client')
 		}
 
 		$scope.findDates = function(date){
-
-			// TimesResource.get({date: date}, function (data) {
-			// 	console.log(appointment);
-			// }, function () {
-			//
-			// })
-
-			$http.get("http://localhost:8000/appointments/times/"+date )
+			$http.get("http://localhost/dance_with_death/API_DANCE/public/appointments/times/"+date )
 			      .then(function(response){
 							 $scope.selectTime = true;
 							 $scope.optionsTime = response.data;
@@ -91,23 +90,20 @@ angular.module('Client')
 		}
 
 		$scope.saveAppointment = function(Appointment) {
+			AppointmentResource.save($scope.Appointment, function(success) {
 
-			// console.log(2);
-			// return;
-		// AppointmentResource.save($scope.Appointment), function (success) {
-		//
-		// 	$scope.typeError = 'success';
-		// 	$scope.mensaje = 'Guardado exitosamente';
-		// }, function (error) {
-		// 	$scope.typeError = 'danger';
-		// 	$scope.mensaje = 'Error al guardar';
-		// };
-		AppointmentResource.save($scope.Appointment);
-		$timeout(function() {
-			$location.path('/appointments');
-			//$("#mensaje").css("display","none");
-		}, 1000);
-		};
+				$scope.typeError = 'success';
+				$scope.mensaje = 'Appointment Created!';
+			}, function(error){
+				$scope.typeError = 'danger';
+				$scope.mensaje = 'Error';
+			});
+			$timeout(function() {
+				$location.path('/appointments');
+				$scope.typeError = '';
+				$scope.mensaje = '';
+			}, 1000);
+			};
 	})
 	.controller('EditAppointmentCtrl', function($scope, AppointmentResource, $location, $timeout, $routeParams, $http) {
 		$scope.title = "Appointment Updated";
@@ -173,11 +169,18 @@ angular.module('Client')
 
 		//$("#date").datepicker();
 		$scope.saveAppointment = function() {
-			AppointmentResource.update($scope.Appointment);
+			AppointmentResource.update($scope.Appointment, function(success) {
+				$scope.typeError = 'success';
+				$scope.mensaje = 'Appointment Updated!';
+			}, function (error) {
+				$scope.typeError = 'danger';
+				$scope.mensaje = 'Errorr';
+			});
 
 			$timeout(function() {
 				$location.path('/appointments');
-
+				$scope.typeError = '';
+				$scope.mensaje = '';
 			}, 1000);
 		};
 	});
