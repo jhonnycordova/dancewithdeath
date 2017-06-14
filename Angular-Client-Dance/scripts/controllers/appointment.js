@@ -106,14 +106,19 @@ angular.module('Client')
 			};
 	})
 	.controller('EditAppointmentCtrl', function($scope, AppointmentResource, $location, $timeout, $routeParams, $http) {
-		$scope.title = "Appointment Updated";
+		$scope.title = "Appointment Update";
 		$scope.button = "Update";
+		$scope.searchDate = '';
 		$scope.Appointment = AppointmentResource.get({
 			id: $routeParams.id
+		}, function (data) {
+			$scope.findDates(data.date, data);
 		});
 
-		$scope.selectTime = false;
+		$scope.selectTime = true;
 		$scope.divTime = true;
+
+
 
 		$scope.putIdTime = function(id){
 			if(id == "9:00"){
@@ -156,18 +161,26 @@ angular.module('Client')
 				id = 19;
 			}
 			$scope.Appointment.idtime = id;
+
 		}
 
+		$scope.findDates = function(date, data = null){
 
-		$scope.findDates = function(date){
-			$http.get("http://localhost:8000/appointments/times/"+date )
+			$http.get("http://localhost/dance_with_death/API_DANCE/public/appointments/times/"+date )
 			      .then(function(response){
 							 $scope.selectTime = true;
 							 $scope.optionsTime = response.data;
+							 if (null != data) {
+								 $scope.optionsTime.push({id: data.startTime, name : data.startTime});
+								 //$scope.Appointment.startTime = data.startTime;
+							 }
+
+
 			});
 		}
 
-		//$("#date").datepicker();
+
+
 		$scope.saveAppointment = function() {
 			AppointmentResource.update($scope.Appointment, function(success) {
 				$scope.typeError = 'success';
